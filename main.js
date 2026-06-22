@@ -66,3 +66,35 @@ async function jalankanPerubahan() {
 }
 
 jalankanPerubahan().then((res) => console.log(res));
+
+// membuat request ke server 
+const requestCallback = (url, success, failure) => {
+	const delay = Math.floor(Math.random() * 4500) + 500;
+	setTimeout(() => {
+		if (delay > 4000) {
+			failure('Error: Connection Timeout');
+		} else {
+			success(`Success: ${url} (${delay}ms)`);
+		}
+	}, delay);
+};
+
+// 1. Buat fungsi requestPromise di sini
+const requestPromise = (url) => {
+	return new Promise((resolve, reject) => {
+		requestCallback(url, resolve, reject);
+	});
+};
+
+async function requestHandler() {
+	try {
+		// 2. Sekarang requestPromise sudah bisa dipanggil dengan aman
+		let result = await requestPromise('movie.com');
+		console.log(result);
+	} catch (error) {
+		console.log('Pesan Error:', error);
+	}
+}
+
+// 3. Panggil fungsi requestHandler agar kodenya dieksekusi
+requestHandler();
